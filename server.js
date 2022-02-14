@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 const path = require('path');
 const uuid = require('./helpers/uuid');
 const fs = require('fs');
@@ -88,6 +88,6 @@ app.delete('/api/notes/:id', (req, res) => {
   return res.json(filteredData);
 })
 
-app.listen(PORT, () =>
-  console.log(`Serving static asset routes at http://localhost:${PORT}`)
+app.listen(port, () =>
+  console.log(`Serving static asset routes at http://localhost:${port}`)
 );
