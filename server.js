@@ -13,7 +13,7 @@ app.use(express.static('public'));
 
 
 // Gets index.html
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')));
 
 // Gets notes.html
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
