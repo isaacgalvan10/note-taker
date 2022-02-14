@@ -5,7 +5,7 @@ const path = require('path');
 const uuid = require('./helpers/uuid');
 const fs = require('fs');
 const { json } = require('express/lib/response');
-let database;
+let database = require('./db/db.json');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
