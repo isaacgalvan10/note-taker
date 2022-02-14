@@ -5,6 +5,7 @@ const path = require('path');
 const uuid = require('./helpers/uuid');
 const fs = require('fs');
 const { json } = require('express/lib/response');
+let database;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -29,6 +30,7 @@ app.get('/api/notes', (req, res) => {
   })
 });
 
+
 // Posts a new note into db.json file
 app.post('/api/notes', (req, res) => {
   const { title, text } = req.body;
@@ -37,7 +39,7 @@ app.post('/api/notes', (req, res) => {
     const newNote = {
       title,
       text,
-      note_id: uuid()
+      id: uuid()
     }
 
     fs.readFile('./db/db.json', (err, data) => {
@@ -46,7 +48,7 @@ app.post('/api/notes', (req, res) => {
       } else {
         const jsonData = JSON.parse(data);
         jsonData.push(newNote);
-  
+        database = jsonData;
         fs.writeFile('./db/db.json', JSON.stringify(jsonData, null, 4), (writeErr) => {
           if (writeErr) {
             console.error(writeErr);
@@ -66,6 +68,25 @@ app.post('/api/notes', (req, res) => {
     res.status(500).json('Error in posting new note');
   }
 });
+
+
+// deletes note by id
+app.delete('/api/notes/:id', (req, res) => {
+  const filteredData = database.filter((note) => {
+    return note.id !== req.params.id;
+  });
+
+  database = filteredData;
+  fs.writeFile('./db/db.json', JSON.stringify(filteredData), (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(`${req.params.id} note has been deleted`);
+    }
+  })
+
+  return res.json(filteredData);
+})
 
 app.listen(PORT, () =>
   console.log(`Serving static asset routes at http://localhost:${PORT}`)
